@@ -1,0 +1,32 @@
+= WebConfig Class for ESP8266 =
+
+With this class you can easily have a generic web configurator for
+the transceiver, where you can change between Access Point and Station
+modes at any time without needing to rewire the module.
+
+Even when it is configured to work as a Station, if it fails to connect
+to the wifi router it will fallback automatically to AP mode, so you
+still can access your module from the web.
+
+On the very first run, it will start in AP mode on 192.168.0.1
+From there, you can use any browser to configure the module.
+
+This code is to be compiled with Arduino IDE + ESP8266 Board Extension.
+
+== License ==
+
+Copyright (c) 2015 Vander 'imerso' Nunes, All rights reserved.
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
