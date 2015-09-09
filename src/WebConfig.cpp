@@ -32,6 +32,10 @@ WebConfig::WebConfig()
 
 
 // Constructor with initialization
+// appName   : your application name
+// defAPName : default AP name, in case of falling back to Access Point mode
+// defAPPass : default AP password, in case of falling back to Access Point mode
+// doReset   : if your application wants to clear EEPROM settings, ask for doReset
 WebConfig::WebConfig(const char* appName, const char* defAPName, const char* defAPPass, bool doReset)
 {
 	Init(appName, defAPName, defAPPass, doReset);
@@ -39,9 +43,10 @@ WebConfig::WebConfig(const char* appName, const char* defAPName, const char* def
 
 
 // Initialize the configurator
-// defName  : default AP name, in case of falling back to Access Point mode
-// defPass  : default AP password, in case of falling back to Access Point mode
-// httpPort : port to always listen to http access for configuration
+// appName   : your application name
+// defAPName : default AP name, in case of falling back to Access Point mode
+// defAPPass : default AP password, in case of falling back to Access Point mode
+// doReset   : if your application wants to clear EEPROM settings, ask for doReset
 void WebConfig::Init(const char* appName, const char* defAPName, const char* defAPPass, bool doReset)
 {
 	// update the application name
@@ -51,7 +56,7 @@ void WebConfig::Init(const char* appName, const char* defAPName, const char* def
 	// try to load settings from the EEPROM;
 	// if there are no settings, it fails or user configured to run in AP mode,
 	// start the AP, else try to connect to the given router ssid/password.
-	if (!LoadSettings() || doReset)
+	if (doReset || !LoadSettings())
 	{
 		isAP = true;
 		strncpy(apName, defAPName, 32);
@@ -159,8 +164,6 @@ void WebConfig::ProcessHTTP()
 		int endLinePos = authInfo.indexOf("\r");
 		if (endLinePos == -1) { httpClient.print("Malformed request."); httpClient.stop(); return; }
 		authInfo = authInfo.substring(0, endLinePos);
-		//Serial.println(String("AUTH: ") + String(authInfo));
-		//Serial.println(String("BASEAUTH: ") + String(base64Auth));
 		if (strncmp(base64Auth, authInfo.c_str(), 64))
 		{
 			s = "<h1><b>ACCESS DENIED</b></h1>";

@@ -33,13 +33,17 @@ class WebConfig
 		WebConfig();
 
 		// Constructor with initialization
+		// appName   : your application name
+		// defAPName : default AP name, in case of falling back to Access Point mode
+		// defAPPass : default AP password, in case of falling back to Access Point mode
+		// doReset   : if your application wants to clear EEPROM settings, ask for doReset
 		WebConfig(const char* appName, const char* defAPName, const char* defAPPass, bool doReset);
 
 		// Initialize the configurator
-		// appName    : name of your own application
-		// defAPName  : default AP name, in case of falling back to Access Point mode
-		// defAPPass  : default AP password, in case of falling back to Access Point mode
-		// httpPort   : port to always listen to http access for configuration
+		// appName   : your application name
+		// defAPName : default AP name, in case of falling back to Access Point mode
+		// defAPPass : default AP password, in case of falling back to Access Point mode
+		// doReset   : if your application wants to clear EEPROM settings, ask for doReset
 		void Init(const char* appName, const char* defAPName, const char* defAPPass, bool doReset);
 
 		// Destructor
