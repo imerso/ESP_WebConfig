@@ -8,6 +8,8 @@ Even when it is configured to work as a Station, if it fails to connect
 to the wifi router it will fallback automatically to AP mode, so you
 still can access your module from the web.
 
+![ESPWebConfig](/screenshots/ESPWebConfig.jpg?raw=true)
+
 On the very first run, it will start in AP mode on 192.168.0.1
 From there, you can use any browser to configure the module.
 
