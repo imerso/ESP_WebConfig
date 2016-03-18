@@ -115,7 +115,7 @@ class WebConfig
 		// Parse settings values in case the HTTP request includes them.
 		// Format is:
 		// /?(webPort)&(webLogin)&(webPassword)&(base64Auth)&(isAP)&(ap_name)&(ap_password)&(ap_channel)&(ssid)&(password)&(udpport)&(tcpport)
-		void ProcessParms(String req);
+		bool ProcessParms(String req);
 };
 
 #endif
