@@ -173,9 +173,6 @@ void WebConfig::ProcessHTTP()
 		}
 	}
 
-	// If there are parms, update variables and save settings
-	ProcessParms(req);
-
 	byte mac[6];
 	WiFi.macAddress(mac);
 	String m = String(mac[0],HEX) + ":" + String(mac[1],HEX) + ":" + String(mac[2],HEX) + ":" + String(mac[3],HEX) + ":" + String(mac[4],HEX) + ":" + String(mac[5],HEX);
@@ -188,6 +185,13 @@ void WebConfig::ProcessHTTP()
 	s = "HTTP/1.1 200 OK\r\n";
 	s += "Content-Type: text/html\r\n\r\n";
 	s += "<!DOCTYPE HTML>\r\n<html><body>\r\n";
+
+	// If there are parms, update variables and save settings
+	bool updated = ProcessParms(req);
+	if (updated)
+	{
+		s += "Parameters have been updated and microcontroller will restart.<br><br>\r\n";
+	}
 
 	// javascript to save configuration
 	s += "<script>\r\n";
@@ -268,6 +272,15 @@ void WebConfig::ProcessHTTP()
 	// write second part of response
 	httpClient.write(s.c_str(), s.length());
 	httpClient.flush();
+
+	if (updated)
+	{
+		// give some time
+		delay(2000);
+
+		// reset the microcontroller
+		Reset();
+	}
 }
 
 
@@ -417,19 +430,21 @@ char* WebConfig::Token(char** req, const char* sep)
 // Parse settings values in case the HTTP request includes them.
 // Format is:
 // /?(webPort)&(webLogin)&(webPassword)&(base64Auth)&(isAP)&(ap_name)&(ap_password)&(ap_channel)&(ssid)&(password)&(udpport)&(tcpport)
-void WebConfig::ProcessParms(String req)
+bool WebConfig::ProcessParms(String req)
 {
-	if (req.length() == 0) return;
-	if (req.indexOf("/?") == -1) return;
+	if (req.length() == 0) return false;
+	if (req.indexOf("/?") == -1) return false;
 
-	char* pReq = new char[req.length()];
+	char* pReq = new char[req.length()+1];
+	if (!pReq) return false;
+
 	strcpy(pReq, req.c_str());
 
 	char* pPos = strstr(pReq, "/?");
 	if (!pPos)
 	{
 		delete pReq;
-		return;
+		return false;
 	}
 
 	// position over the first parameter
@@ -452,7 +467,10 @@ void WebConfig::ProcessParms(String req)
 	// save setting on EEPROM
 	SaveSettings();
 
-	// reset the microcontroller
-	Reset();
+	// release temp memory
+	delete pReq;
+
+	// indicate that parameters were updated
+	return true;
 }
 
